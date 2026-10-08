@@ -107,6 +107,7 @@ input[type=text],input[type=tel],input[type=email]{width:100%; font-family:var(-
 @media (prefers-reduced-motion:no-preference){ .dot{animation:pl 2.2s ease-in-out infinite;} @keyframes pl{0%,100%{opacity:1}50%{opacity:.25}} }
 .card p{font-size:15px; color:var(--ink2); margin-bottom:14px;}
 .card p b{color:var(--ink);}
+.tourcard{border-color:var(--gold); border-width:2px;}
 .tiny{font-size:12.5px; color:var(--ink3); margin-top:9px;}
 .next li{font-size:15px; color:var(--ink2); margin-bottom:9px; line-height:1.5;}
 .next{padding-left:20px; margin:0;}
@@ -171,7 +172,6 @@ function form(){
     '</div>'+
     '<p class="blurb">'+esc(CONFIG.blurb)+'</p>'+
     (CONFIG.incentive ? '<div class="incent"><b>Builder incentive:</b> '+esc(CONFIG.incentive)+'</div>' : '')+
-    (CONFIG.tourUrl ? '<p style="margin:-8px 0 22px"><a href="'+esc(CONFIG.tourUrl)+'" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;font-size:14.5px;text-decoration:none;">&#9678; View The 3D Walkthrough &rarr;</a></p>' : '')+
 
     '<div class="q"><div class="qh">What\'s your timeline to move?</div><div class="opts">'+
       opts([{v:'ASAP',l:'ASAP'},{v:'Within 30 days',l:'Within 30 days'},{v:'1 to 3 months',l:'1 to 3 months'},{v:'Just researching',l:'Just researching for now'}], 'timeline', A.timeline)+
@@ -212,6 +212,9 @@ function submit(){
   var payload = JSON.stringify({
     quizType:'showing', listingId:CONFIG.listingId, address:CONFIG.address, city:CONFIG.city, price:CONFIG.price,
     name:A.name, phone:A.phone, email:A.email, timeline:A.timeline, hasAgent:A.hasAgent, wantsShowing:A.wantsShowing,
+    beds:CONFIG.beds, baths:CONFIG.baths, sqft:CONFIG.sqft, wasPrice:CONFIG.wasPrice||'', blurb:CONFIG.blurb,
+    incentive:CONFIG.incentive||'', disclosure:CONFIG.disclosure||'', tourUrl:CONFIG.tourUrl||'',
+    pageUrl:location.origin+location.pathname,
     page:location.href, ts:new Date().toISOString()
   });
   if(!CONFIG.endpoint || CONFIG.endpoint.indexOf('PASTE_') === 0){
@@ -235,6 +238,11 @@ function confirmation(){
     '<div class="body-pad">'+
     '<h1>Got It, '+esc(nm)+'.</h1>'+
     '<p class="sub-l">Your request for <b>'+esc(CONFIG.address)+'</b> is in.</p>'+
+
+    (CONFIG.tourUrl ? '<div class="card tourcard"><div class="chead"><span class="dot"></span>Your 3D Walkthrough Is Ready</div>'+
+      '<p>Walk through every room at your own pace, right from your phone. It opens in a new tab, so you can come right back here.</p>'+
+      '<a class="btn" href="'+esc(CONFIG.tourUrl)+'" target="_blank" rel="noopener" style="text-decoration:none;">&#9654; Start The 3D Walkthrough</a>'+
+      '<p class="tiny">I also emailed you the tour link and all the home details, so you can find it again anytime.</p></div>' : '')+
 
     '<div class="card"><div class="chead"><span class="dot"></span>Keep Your Phone Close</div>'+
     '<p>'+(showing
